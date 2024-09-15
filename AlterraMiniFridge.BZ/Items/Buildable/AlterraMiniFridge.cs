@@ -1,8 +1,10 @@
-﻿using Nautilus.Assets;
+﻿using AlterraMiniFridge.BZ.Runtime;
+using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Extensions;
 using Nautilus.Utility;
+using System;
 using UnityEngine;
 
 namespace AlterraMiniFridge.BZ.Items.Equipment
@@ -11,7 +13,7 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
     {
         public const string ClassId = "AlterraMiniFridge";
         public const string DisplayName = "Alterra Mini Fridge";
-        public const string Description = "Powerful mini fridge o store your food and water supplies.";
+        public const string Description = "Are you a fan of cold fish? Cold drinks? The all-new Alterra Mini Fridge has you covered!";
 
         public static PrefabInfo PrefabInfo { get; } = PrefabInfo
             .WithTechType(classId: ClassId, displayName: DisplayName, description: Description, unlockAtStart: true)
@@ -27,9 +29,9 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
                 craftAmount = 1,
                 Ingredients =
                 {
-                    new Ingredient(TechType.Titanium, 1),
-                    //new Ingredient(TechType.Titanium, 4),
-                    //new Ingredient(TechType.WiringKit, 1),
+                    new Ingredient(TechType.Titanium, 2),
+                    new Ingredient(TechType.Glass, 1),
+                    new Ingredient(TechType.IceFruitPlant, 1),
                 },
             };
 
@@ -50,6 +52,8 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
             MaterialUtils.ApplySNShaders(prefab);
 
             SetupConstructable(prefab);
+            SetupStorage(prefab);
+            SetupExtraScript(prefab);
 
             return prefab;
         }
@@ -66,6 +70,36 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
             constructable.deconstructionAllowed = true;
             constructable.forceUpright = true;
             constructable.rotationEnabled = true;
+        }
+
+        private static void SetupStorage(GameObject prefab)
+        {
+            var wasActive = prefab.activeSelf;
+
+            if (wasActive) prefab.SetActive(false);
+
+            var storageRoot = prefab.FindChild("model");
+
+            var childObjectIdentifier = storageRoot.AddComponent<ChildObjectIdentifier>();
+            childObjectIdentifier.ClassId = $"{PrefabInfo.ClassID}Container";
+
+            var container = prefab.AddComponent<StorageContainer>();
+            container.prefabRoot = prefab;
+            container.width = 4;
+            container.height = 6;
+            container.storageRoot = childObjectIdentifier;
+            container.preventDeconstructionIfNotEmpty = true;
+            container.hoverText = $"Open Mini Fridge";
+            prefab.AddComponent<AlterraMiniFridgeContainer>().CopyComponent(container);
+
+            UnityEngine.Object.DestroyImmediate(container);
+
+            if (wasActive) prefab.SetActive(true);
+        }
+
+        private static void SetupExtraScript(GameObject prefab)
+        {
+            var fridgeController = prefab.AddComponent<AlterraMiniFridgeController>();
         }
     }
 }
