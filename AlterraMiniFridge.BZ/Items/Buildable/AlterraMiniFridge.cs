@@ -31,7 +31,7 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
                 {
                     new Ingredient(TechType.Titanium, 2),
                     new Ingredient(TechType.Glass, 1),
-                    new Ingredient(TechType.IceFruitPlant, 1),
+                    new Ingredient(TechType.IceFruit, 1),
                 },
             };
 
@@ -100,6 +100,30 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
         private static void SetupExtraScript(GameObject prefab)
         {
             var fridgeController = prefab.AddComponent<AlterraMiniFridgeController>();
+        }
+
+        private static void SetupMaterials(GameObject prefab)
+        {
+            try
+            {
+                foreach (Renderer renderer in prefab.GetComponentsInChildren<Renderer>())
+                {
+                    foreach (Material material in renderer.materials)
+                    {
+                        if (material == null) continue;
+
+
+                        material.EnableKeyword("MARMO_EMISSION");
+                        //material.SetColor(ShaderPropertyID._GlowColor, LightColor);
+                        material.SetFloat(ShaderPropertyID._GlowStrength, 3.0f);
+                        material.SetFloat(ShaderPropertyID._GlowStrengthNight, 5.0f);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error updating materials: {ex}");
+            }
         }
     }
 }
