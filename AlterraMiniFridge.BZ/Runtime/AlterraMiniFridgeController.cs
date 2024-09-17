@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace AlterraMiniFridge.BZ.Runtime
+namespace AlterraMiniFridge.Runtime
 {
     public class AlterraMiniFridgeController : MonoBehaviour
     {
@@ -19,7 +19,12 @@ namespace AlterraMiniFridge.BZ.Runtime
             FridgeDoor = gameObject.transform.Find("model/FridgeBody/FridgeDoor").transform;
 
             powerRelay = PowerSource.FindRelay(base.transform);
+#if SN
+            powerRelay.powerUpEvent.AddHandler(this, OnPowerStatus);
+            powerRelay.powerDownEvent.AddHandler(this, OnPowerStatus);
+#elif BZ
             powerRelay.powerStatusEvent.AddHandler(this, OnPowerStatus);
+#endif
 
             storageContainer = gameObject.GetComponent<AlterraMiniFridgeContainer>();
             storageContainer.container.onAddItem += AddItem;
@@ -46,9 +51,21 @@ namespace AlterraMiniFridge.BZ.Runtime
                 if ((bool)(Object)component && component.decomposes)
                 {
                     if (!isPowered)
+                    {
+#if SN
+                        component.decomposes = true;
+#elif BZ
                         component.UnpauseDecay();
+#endif
+                    }
                     else
+                    {
+#if SN
+                        component.decomposes = false;
+#elif BZ
                         component.PauseDecay();
+#endif
+                    }
                 }
             }
         }
@@ -68,7 +85,11 @@ namespace AlterraMiniFridge.BZ.Runtime
             Eatable component = item.item.GetComponent<Eatable>();
             if (!((Object)component != (Object)null) || !component.decomposes || !this.powerRelay.IsPowered())
                 return;
-            component.PauseDecay();
+#if SN
+            component.decomposes = false;
+#elif BZ
+                        component.PauseDecay();
+#endif
         }
 
         private void RemoveItem(InventoryItem item)
@@ -78,7 +99,11 @@ namespace AlterraMiniFridge.BZ.Runtime
             Eatable component = item.item.GetComponent<Eatable>();
             if (!((Object)component != (Object)null) || !component.decomposes)
                 return;
-            component.UnpauseDecay();
+#if SN
+            component.decomposes = true;
+#elif BZ
+                        component.UnpauseDecay();
+#endif
         }
 
         private void AnimateDoor(bool isOpening)

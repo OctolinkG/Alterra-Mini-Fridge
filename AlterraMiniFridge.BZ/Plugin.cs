@@ -1,4 +1,4 @@
-﻿using AlterraMiniFridge.BZ.Items.Equipment;
+﻿using AlterraMiniFridge.Items.Equipment;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -6,7 +6,7 @@ using Nautilus.Utility;
 using System.Reflection;
 using UnityEngine;
 
-namespace AlterraMiniFridge.BZ
+namespace AlterraMiniFridge
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInDependency("com.snmodding.nautilus")]

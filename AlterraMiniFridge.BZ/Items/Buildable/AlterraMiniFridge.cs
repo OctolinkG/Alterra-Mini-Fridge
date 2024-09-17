@@ -1,13 +1,18 @@
-﻿using AlterraMiniFridge.BZ.Runtime;
+﻿using AlterraMiniFridge.Runtime;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Extensions;
 using Nautilus.Utility;
 using System;
+using System.ComponentModel;
 using UnityEngine;
 
-namespace AlterraMiniFridge.BZ.Items.Equipment
+#if SN
+using static CraftData;
+#endif
+
+namespace AlterraMiniFridge.Items.Equipment
 {
     public static class AlterraMiniFridge
     {
@@ -31,7 +36,11 @@ namespace AlterraMiniFridge.BZ.Items.Equipment
                 {
                     new Ingredient(TechType.Titanium, 2),
                     new Ingredient(TechType.Glass, 1),
+#if SN
+                    new Ingredient(TechType.BluePalmSeed, 1),
+#elif BZ
                     new Ingredient(TechType.IceFruit, 1),
+#endif
                 },
             };
 

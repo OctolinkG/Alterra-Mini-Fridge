@@ -2,11 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
-		<AssemblyName>AlterraMiniFridge.BZ</AssemblyName>
+		<AssemblyName>AlterraMiniFridge</AssemblyName>
 		<Version>1.0.0</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>11</LangVersion>
-		<RootNamespace>AlterraMiniFridge.BZ</RootNamespace>
+		<RootNamespace>AlterraMiniFridge</RootNamespace>
 
 		<RestoreAdditionalProjectSources>
 			https://api.nuget.org/v3/index.json;
@@ -18,16 +18,6 @@
 		<Configurations>SN;BZ</Configurations>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
-		<PackageReference Include="BepInEx.Core" Version="5.4.21" />
-		<PackageReference Include="BepInEx.PluginInfoProps" Version="1.1.0" />
-		<PackageReference Include="UnityEngine.Modules" Version="2019.4.36" IncludeAssets="compile" />
-		<PackageReference Include="Subnautica.BelowZero.GameLibs" Version="49371.0.0.1-r.0" />
-		<PackageReference Include="SubnauticaZero.Nautilus" Version="1.*-*" PrivateAssets="all" />
-		<PackageReference Include="PolySharp" Version="1.13.1" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
 	</ItemGroup>
@@ -36,6 +26,6 @@
 		<Folder Include="Assets\" />
 	</ItemGroup>
 
-
+	<Import Project="..\References.targets" />
 	<Import Project="..\SharedPostBuild.targets" />
 </Project>
